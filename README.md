@@ -9,3 +9,7 @@ HTML.
 ## Como executar 
 
 Abra o arquivo inde.html em qualquer navegador.
+
+## autoria
+
+Joaquim Mazzi Moraes da Silva
