@@ -5,182 +5,658 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Entrar | Meu App</title>
     <style>
+        :root {
+            --bg-primary: #0b1020;
+            --bg-secondary: #141d35;
+            --panel: rgba(17, 24, 39, 0.72);
+            --panel-solid: #ffffff;
+            --panel-soft: rgba(255, 255, 255, 0.06);
+            --border: rgba(148, 163, 184, 0.18);
+            --primary: #8b5cf6;
+            --primary-strong: #7c3aed;
+            --primary-soft: rgba(139, 92, 246, 0.15);
+            --success: #34d399;
+            --text: #e5eefb;
+            --muted: #a5b4cf;
+            --dark-text: #1f2937;
+            --shadow: 0 25px 60px rgba(15, 23, 42, 0.45);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html, body {
+            min-height: 100%;
         }
 
         body {
-            display: flex;
             min-height: 100vh;
-            background-color: #f6f8fa;
-            color: #24292f;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 24px;
+            background:
+                radial-gradient(circle at top left, rgba(139, 92, 246, 0.42), transparent 28%),
+                radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.18), transparent 26%),
+                linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            color: var(--text);
+            overflow: hidden;
         }
 
-        .login-wrapper {
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 420px;
+            height: 420px;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.42;
+            pointer-events: none;
+        }
+
+        body::before {
+            background: rgba(139, 92, 246, 0.35);
+            top: -120px;
+            left: -80px;
+            animation: float 14s ease-in-out infinite alternate;
+        }
+
+        body::after {
+            background: rgba(45, 212, 191, 0.25);
+            right: -80px;
+            bottom: -120px;
+            animation: float 16s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(24px) scale(1.08); }
+        }
+
+        .login-shell {
+            position: relative;
             width: 100%;
-            max-width: 360px;
+            max-width: 980px;
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            backdrop-filter: blur(18px);
+            box-shadow: var(--shadow);
+            overflow: hidden;
         }
 
-        .brand-header {
-            text-align: center;
-            margin-bottom: 24px;
+        .info-panel {
+            position: relative;
+            padding: 52px 42px;
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.18), rgba(15, 23, 42, 0.2));
+            border-right: 1px solid var(--border);
         }
 
-        .brand-header .logo-mark {
-            width: 40px;
-            height: 40px;
-            background: #0969da;
-            color: #fff;
-            border-radius: 8px;
+        .brand-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 36px;
+        }
+
+        .brand-mark {
+            width: 46px;
+            height: 46px;
+            border-radius: 16px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+            box-shadow: 0 12px 24px rgba(124, 58, 237, 0.5);
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 0.06em;
+        }
+
+        .brand-text {
+            font-size: 1.2rem;
             font-weight: 700;
-            font-size: 20px;
-            margin-bottom: 12px;
+            letter-spacing: 0.04em;
         }
 
-        .brand-header h1 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #1f2328;
-            letter-spacing: -0.3px;
+        .hero-copy h1 {
+            font-size: clamp(2.2rem, 3vw, 3.2rem);
+            line-height: 1.08;
+            letter-spacing: -0.06em;
+            margin-bottom: 14px;
         }
 
-        .login-box {
-            background: #ffffff;
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
-            padding: 24px;
-            box-shadow: 0 3px 6px rgba(140, 149, 159, 0.15);
+        .hero-copy p {
+            max-width: 420px;
+            color: var(--muted);
+            font-size: 1.02rem;
+            line-height: 1.7;
+            margin-bottom: 28px;
         }
 
-        .form-group {
-            margin-bottom: 16px;
+        .feature-list {
+            display: grid;
+            gap: 16px;
+            margin: 26px 0 32px;
         }
 
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: #1f2328;
-        }
-
-        .label-row {
+        .feature-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 14px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .label-row a {
-            font-size: 12px;
-            color: #0969da;
-            text-decoration: none;
+        .feature-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(168, 85, 247, 0.18);
+            border: 1px solid rgba(196, 181, 253, 0.28);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            color: #d8c6ff;
         }
 
-        .label-row a:hover {
-            text-decoration: underline;
+        .feature-item strong {
+            display: block;
+            margin-bottom: 2px;
+            font-size: 0.95rem;
         }
 
-        .form-control {
-            width: 100%;
-            padding: 7px 12px;
-            font-size: 14px;
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
-            background-color: #f6f8fa;
-            color: #1f2328;
-            outline: none;
-            transition: 0.2s ease;
+        .feature-item span {
+            color: var(--muted);
+            font-size: 0.82rem;
         }
 
-        .form-control:focus {
-            background-color: #ffffff;
-            border-color: #0969da;
-            box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.15);
+        .mini-stats {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
         }
 
-        .btn-primary {
-            width: 100%;
-            padding: 8px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-            background-color: #2da44e;
-            border: 1px solid rgba(27, 31, 36, 0.15);
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: background-color 0.2s;
+        .stat-box {
+            min-width: 120px;
+            padding: 16px 18px;
+            border-radius: 16px;
+            background: rgba(15, 23, 42, 0.42);
+            border: 1px solid var(--border);
         }
 
-        .btn-primary:hover {
-            background-color: #2c974b;
+        .stat-box strong {
+            display: block;
+            font-size: 1.3rem;
+            margin-bottom: 4px;
         }
 
-        .btn-primary:active {
-            background-color: #298e46;
+        .stat-box span {
+            color: var(--muted);
+            font-size: 0.8rem;
         }
 
-        .create-account-box {
-            margin-top: 16px;
-            padding: 16px;
-            border: 1px solid #d0d7de;
-            border-radius: 6px;
+        .form-panel {
+            padding: 42px 32px;
+            background: rgba(255, 255, 255, 0.97);
+            color: var(--dark-text);
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 22px;
+            padding: 28px 22px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        }
+
+        .auth-head {
+            margin-bottom: 26px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 7px 10px;
+            border-radius: 999px;
+            background: var(--primary-soft);
+            color: var(--primary-strong);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .auth-head h2 {
+            font-size: clamp(2rem, 2.6vw, 2.5rem);
+            line-height: 1.1;
+            letter-spacing: -0.05em;
+            margin-bottom: 8px;
+        }
+
+        .auth-head p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .login-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .input-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.84rem;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .input-shell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #dbe3f0;
+            border-radius: 14px;
+            transition: all 0.2s ease;
+            overflow: hidden;
+        }
+
+        .input-shell:focus-within {
+            border-color: rgba(124, 58, 237, 0.75);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.12);
+            background: #fff;
+        }
+
+        .input-shell .icon {
+            width: 42px;
             text-align: center;
-            font-size: 14px;
-            background: #ffffff;
+            color: #7c8aa5;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
         }
 
-        .create-account-box a {
-            color: #0969da;
+        .input-shell input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            color: var(--dark-text);
+            padding: 14px 14px 14px 0;
+            font-size: 0.96rem;
+            outline: none;
+        }
+
+        .toggle-pass {
+            border: none;
+            background: transparent;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0 14px 0 0;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 2px;
+        }
+
+        .checkbox-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #475569;
+            font-size: 0.82rem;
+            cursor: pointer;
+        }
+
+        .checkbox-wrap input {
+            accent-color: var(--primary-strong);
+            width: 16px;
+            height: 16px;
+        }
+
+        .link {
+            color: var(--primary-strong);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 700;
+            font-size: 0.82rem;
         }
 
-        .create-account-box a:hover {
+        .link:hover {
             text-decoration: underline;
+        }
+
+        .primary-button {
+            border: none;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+            color: white;
+            font-weight: 800;
+            font-size: 0.98rem;
+            padding: 15px 18px;
+            letter-spacing: 0.01em;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+            box-shadow: 0 14px 26px rgba(124, 58, 237, 0.32);
+        }
+
+        .primary-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 30px rgba(124, 58, 237, 0.4);
+        }
+
+        .primary-button:active {
+            transform: translateY(0);
+        }
+
+        .primary-button:disabled {
+            opacity: 0.75;
+            cursor: wait;
+        }
+
+        .status-text {
+            min-height: 20px;
+            font-size: 0.82rem;
+            color: #475569;
+            text-align: center;
+            transition: color 0.2s ease;
+        }
+
+        .status-text.success {
+            color: #047857;
+            font-weight: 700;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 6px 0 2px;
+            color: #94a3b8;
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(148, 163, 184, 0.42);
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .social-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #dbe3f0;
+            background: #fff;
+            color: #334155;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .social-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(15, 23, 42, 0.08);
+        }
+
+        .social-button .dot {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.68rem;
+            font-weight: 900;
+            background: #eef2ff;
+            color: #4338ca;
+            letter-spacing: -0.02em;
+        }
+
+        .signup-row {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .signup-row a {
+            color: var(--primary-strong);
+            text-decoration: none;
+            font-weight: 800;
+        }
+
+        .secure-note {
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.76rem;
+            color: #64748b;
+        }
+
+        .secure-note::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+            display: inline-block;
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.14);
+        }
+
+        @media (max-width: 820px) {
+            .login-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .info-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .info-panel,
+            .form-panel {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <main class="login-shell">
+        <section class="info-panel">
+            <div class="brand-row">
+                <div class="brand-mark">A</div>
+                <div class="brand-text">ApexFlow</div>
+            </div>
 
-    <div class="login-wrapper">
-        <div class="brand-header">
-            <div class="logo-mark">A</div>
-            <h1>Acessar a conta</h1>
-        </div>
+            <div class="hero-copy">
+                <h1>Seu próximo passo começa aqui.</h1>
+                <p>Gerencie tarefas, acompanhe métricas e mantenha seu time em sincronia com uma plataforma pensada para produtividade.</p>
+            </div>
 
-        <div class="login-box">
-            <form action="dashboard.html" method="GET">
-                <div class="form-group">
-                    <label for="email">Endereço de e-mail</label>
-                    <input type="email" id="email" name="email" class="form-control" required autofocus>
-                </div>
-
-                <div class="form-group">
-                    <div class="label-row">
-                        <label for="password">Senha</label>
-                        <a href="#">Esqueceu?</a>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">01</div>
+                    <div>
+                        <strong>Operação ágil</strong>
+                        <span>Dashboard em tempo real e decisões rápidas.</span>
                     </div>
-                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">02</div>
+                    <div>
+                        <strong>Segurança reforçada</strong>
+                        <span>Autenticação protegida e dados em sigilo.</span>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">03</div>
+                    <div>
+                        <strong>Visão clara</strong>
+                        <span>Indicadores e relatórios sempre à mão.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mini-stats">
+                <div class="stat-box">
+                    <strong>24k</strong>
+                    <span>Usuários</span>
+                </div>
+                <div class="stat-box">
+                    <strong>99.9%</strong>
+                    <span>Disponibilidade</span>
+                </div>
+                <div class="stat-box">
+                    <strong>2.4x</strong>
+                    <span>Produtividade</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-panel">
+            <div class="auth-card">
+                <div class="auth-head">
+                    <span class="eyebrow">Acesso</span>
+                    <h2>Bem-vindo de volta</h2>
+                    <p>Entre com sua conta para continuar sua jornada.</p>
                 </div>
 
-                <button type="submit" class="btn-primary">Entrar</button>
-            </form>
-        </div>
+                <form class="login-form" id="loginForm">
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+                        <div class="input-shell">
+                            <span class="icon">@</span>
+                            <input type="email" id="email" name="email" placeholder="seu@email.com" required autocomplete="email">
+                        </div>
+                    </div>
 
-        <div class="create-account-box">
-            Novo por aqui? <a href="#">Criar uma conta</a>.
-        </div>
-    </div>
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <div class="input-shell">
+                            <span class="icon">••</span>
+                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required autocomplete="current-password">
+                            <button type="button" class="toggle-pass" id="togglePassword" aria-label="Mostrar senha">Mostrar</button>
+                        </div>
+                    </div>
 
+                    <div class="meta-row">
+                        <label class="checkbox-wrap">
+                            <input type="checkbox" checked>
+                            <span>Lembrar de mim</span>
+                        </label>
+                        <a href="#" class="link">Esqueci minha senha</a>
+                    </div>
+
+                    <button type="submit" class="primary-button" id="submitButton">Entrar na conta</button>
+                    <div class="status-text" id="statusText" aria-live="polite"></div>
+                </form>
+
+                <div class="divider">ou continue com</div>
+
+                <div class="social-grid">
+                    <button type="button" class="social-button"><span class="dot">G</span> Google</button>
+                    <button type="button" class="social-button"><span class="dot">GH</span> GitHub</button>
+                </div>
+
+                <div class="signup-row">
+                    Ainda não tem conta? <a href="#">Criar conta</a>
+                </div>
+
+                <div class="secure-note">Conexão segura e protegida</div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const togglePasswordButton = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const loginForm = document.getElementById('loginForm');
+        const submitButton = document.getElementById('submitButton');
+        const statusText = document.getElementById('statusText');
+
+        togglePasswordButton.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type = isPassword ? 'text' : 'password';
+            togglePasswordButton.textContent = isPassword ? 'Ocultar' : 'Mostrar';
+            togglePasswordButton.setAttribute('aria-label', isPassword ? 'Ocultar senha' : 'Mostrar senha');
+        });
+
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                statusText.textContent = 'Digite um e-mail válido para continuar.';
+                statusText.classList.remove('success');
+                return;
+            }
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'Entrando...';
+            statusText.textContent = 'Validando suas credenciais...';
+            statusText.classList.remove('success');
+
+            setTimeout(() => {
+                const name = email.split('@')[0] || 'usuário';
+                statusText.textContent = `Olá, ${name}! Redirecionando para o painel...`;
+                statusText.classList.add('success');
+
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 900);
+            }, 1000);
+        });
+    </script>
 </body>
 </html>
